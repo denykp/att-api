@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { MasterKaryawanModule } from './master-karyawan/master-karyawan.module';
+import { KaryawanModule } from './karyawan/karyawan.module';
 
 @Module({
-  imports: [MasterKaryawanModule],
+  imports: [KaryawanModule],
   controllers: [AppController],
   providers: [AppService],
 })
