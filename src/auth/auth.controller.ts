@@ -1,5 +1,7 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, Res, HttpException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { Karyawan } from 'karyawan/karyawan.model';
+import * as crypto from 'crypto';
 
 @Controller()
 export class AuthController {
@@ -7,11 +9,21 @@ export class AuthController {
 
     @Post('login')
     public async login(@Body() body, @Res() res) {
-        if (!body) throw new Error('Informasi login tidak ditemukan');
-        if (!body.NIK) throw new Error('NIK tidak ditemukan');
-        if (!body.password) throw new Error('Password tidak ditemukan');
+        if (!body) throw new HttpException('Informasi login tidak ditemukan', HttpStatus.BAD_REQUEST);
+        if (!body.NIK) throw new HttpException('NIK tidak ditemukan', HttpStatus.BAD_REQUEST);
+        if (!body.password) throw new HttpException('Password tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         const token = await this.authService.sign(body);
-        res.status(HttpStatus.ACCEPTED).json('Bearer ' + token);
+        const karyawan = await Karyawan.findOne<Karyawan>({
+            where: {
+                NIK: body.NIK,
+                password: crypto.createHmac('sha256', body.password).digest('hex')
+            }
+        });
+        const resJson: any = {
+            id: karyawan.id,
+            token: 'Bearer ' + token
+        }
+        res.status(HttpStatus.ACCEPTED).json(resJson);
     }
 }

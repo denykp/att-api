@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BeforeValidate, BeforeCreate } from 'sequelize-typescript';
+import { HttpStatus, HttpException } from '@nestjs/common';
 
 @Table({
     timestamps: true,
@@ -49,10 +50,10 @@ export class Karyawan extends Model<Karyawan> {
     @BeforeValidate
     public static validateData(karyawan: Karyawan, options: any) {
         if (!options.transaction) throw new Error('Missing transaction.');
-        if (!karyawan.NIK) throw new Error('NIK tidak boleh kosong');
-        if (!karyawan.namaDepan) throw new Error('Nama Depan tidak boleh kosong');
-        if (!karyawan.email) throw new Error('Email tidak boleh kosong');
-        if (!karyawan.password) throw new Error('Password tidak boleh kosong');
+        if (!karyawan.NIK) throw new HttpException('NIK tidak boleh kosong', HttpStatus.BAD_REQUEST);
+        if (!karyawan.namaDepan) throw new HttpException('Nama Depan tidak boleh kosong', HttpStatus.BAD_REQUEST);
+        if (!karyawan.email) throw new HttpException('Email tidak boleh kosong', HttpStatus.BAD_REQUEST);
+        if (!karyawan.password) throw new HttpException('Password tidak boleh kosong', HttpStatus.BAD_REQUEST);
     }
 
     @BeforeCreate

@@ -1,15 +1,16 @@
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
+import * as dbConfig from "../../config/config.json"
 import { IAuthService, IJwtOptions } from './interfaces/auth-service.interface';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Karyawan } from 'karyawan/karyawan.model';
 
 @Injectable()
 export class AuthService implements IAuthService {
     private _options: IJwtOptions = {
         algorithm: 'HS256',
-        expiresIn: '2 days',
-        jwtid: process.env.JWT_ID || ''
+        expiresIn: '1 days',
+        jwtid: dbConfig.JWT_ID
     };
 
     get options(): IJwtOptions {
@@ -27,13 +28,12 @@ export class AuthService implements IAuthService {
                 password: crypto.createHmac('sha256', credentials.password).digest('hex')
             }
         });
-        if (!karyawan) throw new Error('Karyawan tidak ditemukan');
+        if (!karyawan) throw new HttpException('NIK atau password yang anda masukkan salah', HttpStatus.NOT_FOUND);
 
         const payload = {
             id: karyawan.id,
             NIK: karyawan.NIK
         };
-
-        return await jwt.sign(payload, process.env.JWT_KEY || '', this._options);
+        return await jwt.sign(payload, dbConfig.JWT_KEY || '', this._options);
     }
 }

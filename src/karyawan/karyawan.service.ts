@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Karyawan } from './karyawan.model';
 import { sequelize } from './../app.service';
 
@@ -40,7 +40,7 @@ export class KaryawanService {
             let karyawan = await this.karyawan.findById<Karyawan>(id, {
                 transaction
             });
-            if (!karyawan) throw new Error('User tidak ditemukan');
+            if (!karyawan) throw new HttpException('Karyawan tidak ditemukan', HttpStatus.NOT_FOUND);
 
             karyawan = this._assign(karyawan, newValue);
             return await karyawan.save({

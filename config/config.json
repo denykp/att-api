@@ -19,5 +19,7 @@
 		"database": "database_test",
 		"host": "127.0.0.1",
 		"dialect": "postgres"
-	}
+	},
+	"JWT_ID": "jsonwebtoken",
+	"JWT_KEY": "secretKey"
 }
