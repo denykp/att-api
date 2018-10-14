@@ -14,7 +14,7 @@ export class AuthController {
         if (!body.password) throw new HttpException('Password tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         const token = await this.authService.sign(body);
-        const karyawan = await Karyawan.findOne<Karyawan>({
+        let karyawan = await Karyawan.findOne<Karyawan>({
             where: {
                 NIK: body.NIK,
                 password: crypto.createHmac('sha256', body.password).digest('hex')
@@ -22,6 +22,9 @@ export class AuthController {
         });
         const resJson: any = {
             id: karyawan.id,
+            NIK: karyawan.NIK,
+            namaDepan: karyawan.namaDepan,
+            email: karyawan.email,
             token: 'Bearer ' + token
         }
         res.status(HttpStatus.ACCEPTED).json(resJson);

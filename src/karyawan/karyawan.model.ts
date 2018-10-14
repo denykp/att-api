@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
-import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BeforeValidate, BeforeCreate } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BeforeValidate, BeforeCreate, PrimaryKey, HasMany } from 'sequelize-typescript';
 import { HttpStatus, HttpException } from '@nestjs/common';
+import { Attendance } from 'attendance/attendance.model';
 
 @Table({
     timestamps: true,

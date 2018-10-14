@@ -7,4 +7,4 @@ import { AttendanceService } from './attendance.service';
     providers: [AttendanceService],
     exports: [AttendanceService]
 })
-export class MasterKaryawanModule { }
+export class AttendanceModule { }

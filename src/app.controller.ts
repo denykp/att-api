@@ -1,6 +1,7 @@
 import { Get, Controller } from '@nestjs/common';
 import { AppService, sequelize } from './app.service';
 import { Karyawan } from 'karyawan/karyawan.model';
+import { Lokasi } from 'lokasi/lokasi.model';
 
 @Controller()
 export class AppController {
@@ -14,7 +15,7 @@ export class AppController {
   }
 
   async load_database() {
-    await sequelize.addModels([Karyawan])
+    await sequelize.addModels([Karyawan, Lokasi])
     await sequelize.sync({ alter: true });
   }
 }
