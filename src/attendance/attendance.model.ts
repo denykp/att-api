@@ -1,4 +1,4 @@
-import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BelongsTo, ForeignKey, DataType } from 'sequelize-typescript';
 import { Karyawan } from 'karyawan/karyawan.model';
 import { Lokasi } from 'lokasi/lokasi.model';
 
@@ -8,6 +8,15 @@ import { Lokasi } from 'lokasi/lokasi.model';
 })
 export class Attendance extends Model<Attendance> {
 
+    @Column({
+        type: DataType.UUID,
+        defaultValue: DataType.UUIDV4,
+        allowNull: false,
+        unique: true,
+        primaryKey: true
+    })
+    id: string;
+
     @BelongsTo(() => Karyawan, { targetKey: 'NIK' })
     karyawan: Karyawan;
 
@@ -15,11 +24,13 @@ export class Attendance extends Model<Attendance> {
     @Column
     NIK: string;
 
-    @BelongsTo(() => Lokasi)
+    @BelongsTo(() => Lokasi, { targetKey: 'id' })
     lokasi: Lokasi;
 
     @ForeignKey(() => Lokasi)
-    @Column
+    @Column({
+        type: DataType.UUID,
+    })
     lokasiId: string;
 
     @Column

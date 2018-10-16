@@ -2,6 +2,8 @@ import { Get, Controller } from '@nestjs/common';
 import { AppService, sequelize } from './app.service';
 import { Karyawan } from 'karyawan/karyawan.model';
 import { Lokasi } from 'lokasi/lokasi.model';
+import { Attendance } from 'attendance/attendance.model';
+import { Sequelize } from 'sequelize-typescript';
 
 @Controller()
 export class AppController {
@@ -15,7 +17,51 @@ export class AppController {
   }
 
   async load_database() {
-    await sequelize.addModels([Karyawan, Lokasi])
+    await sequelize.addModels([Karyawan, Lokasi, Attendance])
+
+    await this.dropForeignKeyConstraints(sequelize);
+    await this.dropUniqueConstraints(sequelize);
+
     await sequelize.sync({ alter: true });
+  }
+
+  dropForeignKeyConstraints(database) {
+    //this is a hack for dev only!
+    //todo: check status of posted github issue, https://github.com/sequelize/sequelize/issues/7606
+    const queryInterface = database.getQueryInterface();
+    return queryInterface.showAllTables()
+      .then(tableNames => {
+        return Promise.all(tableNames.map(tableName => {
+          return queryInterface.showConstraint(tableName)
+            .then(constraints => {
+              return Promise.all(constraints.map(constraint => {
+                if (constraint.constraintType === 'FOREIGN KEY') {
+                  return queryInterface.removeConstraint(tableName, constraint.constraintName);
+                }
+              }));
+            });
+        }));
+      })
+      .then(() => database);
+  }
+
+  dropUniqueConstraints(database) {
+    //this is a hack for dev only!
+    //todo: check status of posted github issue, https://github.com/sequelize/sequelize/issues/7606
+    const queryInterface = database.getQueryInterface();
+    return queryInterface.showAllTables()
+      .then(tableNames => {
+        return Promise.all(tableNames.map(tableName => {
+          return queryInterface.showConstraint(tableName)
+            .then(constraints => {
+              return Promise.all(constraints.map(constraint => {
+                if (constraint.constraintType === 'UNIQUE') {
+                  return queryInterface.removeConstraint(tableName, constraint.constraintName);
+                }
+              }));
+            });
+        }));
+      })
+      .then(() => database);
   }
 }

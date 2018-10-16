@@ -1,7 +1,6 @@
 import * as crypto from 'crypto';
-import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BeforeValidate, BeforeCreate, PrimaryKey, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BeforeValidate, BeforeCreate, PrimaryKey, HasMany, DataType } from 'sequelize-typescript';
 import { HttpStatus, HttpException } from '@nestjs/common';
-import { Attendance } from 'attendance/attendance.model';
 
 @Table({
     timestamps: true,
@@ -9,7 +8,19 @@ import { Attendance } from 'attendance/attendance.model';
 })
 export class Karyawan extends Model<Karyawan> {
 
-    @Column
+    @Column({
+        type: DataType.UUID,
+        defaultValue: DataType.UUIDV4,
+        allowNull: false,
+        unique: true,
+        primaryKey: true
+    })
+    id: string;
+
+    @Column({
+        allowNull: false,
+        unique: true
+    })
     NIK: string;
 
     @Column

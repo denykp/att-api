@@ -9,7 +9,14 @@ export class AuthMiddleware implements NestMiddleware {
         return async (req, res, next) => {
             if (req.headers.authorization && (req.headers.authorization as string).split(' ')[0] === 'Bearer') {
                 const token = (req.headers.authorization as string).split(' ')[1];
-                const decoded: any = jwt.verify(token, dbConfig.JWT_KEY || '');
+                let decoded: any;
+                try {
+                    decoded = jwt.verify(token, dbConfig.JWT_KEY || '')
+                } catch (error) {
+                    if (error) {
+                        throw new HttpException(error, HttpStatus.FORBIDDEN);
+                    }
+                }
                 const karyawan = await Karyawan.findOne<Karyawan>({
                     where: {
                         id: decoded.id,
