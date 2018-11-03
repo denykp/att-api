@@ -3,7 +3,7 @@ import * as crypto from 'crypto';
 import * as dbConfig from "../../config/config.json"
 import { IAuthService, IJwtOptions } from './interfaces/auth-service.interface';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Karyawan } from 'karyawan/karyawan.model';
+import { Karyawan } from '../karyawan/karyawan.model';
 
 @Injectable()
 export class AuthService implements IAuthService {

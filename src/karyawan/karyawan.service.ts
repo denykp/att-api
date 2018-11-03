@@ -1,6 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Karyawan } from './karyawan.model';
 import { sequelize } from './../app.service';
+import { Attendance } from '../attendance/attendance.model';
 
 @Injectable()
 export class KaryawanService {
@@ -22,6 +23,21 @@ export class KaryawanService {
         return await this.karyawan.findOne<Karyawan>(options);
     }
 
+    public async findByNIK(NIK: string, reporting: boolean): Promise<Karyawan | null> {
+        let result: any;
+        if (reporting) {
+            result = await this.karyawan.findOne<Karyawan>({
+                where: { NIK: NIK },
+                include: [{ model: Attendance }]
+            });
+        } else {
+            result = await this.karyawan.findOne<Karyawan>({
+                where: { NIK: NIK }
+            });
+        }
+        return result
+    }
+
     public async findById(id: number): Promise<Karyawan | null> {
         return await this.karyawan.findById<Karyawan>(id);
     }
@@ -35,9 +51,10 @@ export class KaryawanService {
         });
     }
 
-    public async update(id: number, newValue: Karyawan): Promise<Karyawan | null> {
+    public async update(NIK: string, newValue: Karyawan): Promise<Karyawan | null> {
         return await this.seqInstance.transaction(async transaction => {
-            let karyawan = await this.karyawan.findById<Karyawan>(id, {
+            let karyawan = await this.karyawan.findOne<Karyawan>({
+                where: { NIK: NIK },
                 transaction
             });
             if (!karyawan) throw new HttpException('Karyawan tidak ditemukan', HttpStatus.NOT_FOUND);
@@ -50,10 +67,10 @@ export class KaryawanService {
         });
     }
 
-    public async delete(id: number): Promise<void> {
+    public async delete(NIK: string): Promise<void> {
         return await this.seqInstance.transaction(async transaction => {
             return await this.karyawan.destroy({
-                where: { id },
+                where: { NIK: NIK },
                 transaction
             });
         });

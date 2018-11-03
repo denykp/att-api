@@ -1,7 +1,8 @@
 import { Module, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AttendanceController } from './attendance.controller';
 import { AttendanceService } from './attendance.service';
-import { AuthMiddleware } from 'auth/auth.middleware';
+import { AuthMiddleware } from '../auth/auth.middleware';
+import { Attendance } from './attendance.model';
 
 @Module({
     controllers: [AttendanceController],

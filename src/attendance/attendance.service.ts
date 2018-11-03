@@ -1,8 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { Attendance } from './attendance.model';
-import { sequelize } from 'app.service';
-import { Karyawan } from 'karyawan/karyawan.model';
-import { Lokasi } from 'lokasi/lokasi.model';
+import { sequelize } from '../app.service';
+import { Karyawan } from '../karyawan/karyawan.model';
+import { Kegiatan } from '../kegiatan/kegiatan.model';
 
 @Injectable()
 export class AttendanceService {
@@ -13,7 +13,7 @@ export class AttendanceService {
         return await this.attendance.findAll<Attendance>({
             include: [
                 { model: Karyawan },
-                { model: Lokasi }
+                { model: Kegiatan }
             ]
         });
     }
@@ -26,7 +26,7 @@ export class AttendanceService {
         return await this.attendance.findById<Attendance>(id, {
             include: [
                 { model: Karyawan },
-                { model: Lokasi }
+                { model: Kegiatan }
             ]
         });
     }

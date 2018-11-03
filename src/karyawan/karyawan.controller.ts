@@ -24,27 +24,35 @@ export class KaryawanController {
         return res.status(HttpStatus.CREATED).send();
     }
 
-    @Get('karyawan/:id')
-    public async show(@Param('id') id: number, @Res() res) {
-        if (!id) throw new HttpException('id karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
+    @Get('karyawan/:NIK')
+    public async show(@Param('NIK') NIK: string, @Res() res) {
+        if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
-        const karyawan = await this.karService.findById(id);
-        return res.status(HttpStatus.OK).json(karyawan);
+        const karyawan = await this.karService.findByNIK(NIK, false);
+        return res.status(HttpStatus.OK).json({ 'result': karyawan });
     }
 
-    @Put('karyawan/:id')
-    public async update(@Body() body, @Param('id') id: number, @Res() res) {
-        if (!id) throw new HttpException('id karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
+    @Get('karyawan-reporting/:NIK')
+    public async showReporting(@Param('NIK') NIK: string, @Res() res) {
+        if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
-        await this.karService.update(id, body);
+        const karyawan = await this.karService.findByNIK(NIK, true);
+        return res.status(HttpStatus.OK).json({ 'result': karyawan });
+    }
+
+    @Put('karyawan/:NIK')
+    public async update(@Body() body, @Param('NIK') NIK: string, @Res() res) {
+        if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
+
+        await this.karService.update(NIK, body);
         return res.status(HttpStatus.OK).send();
     }
 
-    @Delete('karyawan/:id')
-    public async delete(@Param('id') id: number, @Res() res) {
-        if (!id) throw new HttpException('id karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
+    @Delete('karyawan/:NIK')
+    public async delete(@Param('NIK') NIK: string, @Res() res) {
+        if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
-        await this.karService.delete(id);
+        await this.karService.delete(NIK);
         return res.status(HttpStatus.OK).send();
     }
 }

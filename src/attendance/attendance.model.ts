@@ -1,6 +1,6 @@
 import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BelongsTo, ForeignKey, DataType } from 'sequelize-typescript';
-import { Karyawan } from 'karyawan/karyawan.model';
-import { Lokasi } from 'lokasi/lokasi.model';
+import { Karyawan } from '../karyawan/karyawan.model';
+import { Kegiatan } from '../kegiatan/kegiatan.model';
 
 @Table({
     timestamps: true,
@@ -22,16 +22,17 @@ export class Attendance extends Model<Attendance> {
 
     @ForeignKey(() => Karyawan)
     @Column
-    NIK: string;
+    karyawanNIK: string;
 
-    @BelongsTo(() => Lokasi, { targetKey: 'id' })
-    lokasi: Lokasi;
+    @Column
+    fotoLokasi: string;
 
-    @ForeignKey(() => Lokasi)
-    @Column({
-        type: DataType.UUID,
-    })
-    lokasiId: string;
+    @BelongsTo(() => Karyawan, { targetKey: 'id' })
+    kegiatan: Kegiatan
+
+    @ForeignKey(() => Kegiatan)
+    @Column
+    kegiatanId: string;
 
     @Column
     lintangAktual: string; //Latitude
@@ -44,6 +45,12 @@ export class Attendance extends Model<Attendance> {
 
     @Column
     tipe: string; //Attend-In dan Attend-Out
+
+    // @Column
+    // attendIn: Date; //Absen masuk
+
+    // @Column
+    // attendOut: Date; //Absen keluar
 
     @CreatedAt
     creationDate: Date;

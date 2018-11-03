@@ -1,9 +1,8 @@
 import { Get, Controller } from '@nestjs/common';
 import { AppService, sequelize } from './app.service';
-import { Karyawan } from 'karyawan/karyawan.model';
-import { Lokasi } from 'lokasi/lokasi.model';
-import { Attendance } from 'attendance/attendance.model';
-import { Sequelize } from 'sequelize-typescript';
+import { Karyawan } from './karyawan/karyawan.model';
+import { Attendance } from './attendance/attendance.model';
+import { Kegiatan } from './kegiatan/kegiatan.model';
 
 @Controller()
 export class AppController {
@@ -17,7 +16,7 @@ export class AppController {
   }
 
   async load_database() {
-    await sequelize.addModels([Karyawan, Lokasi, Attendance])
+    await sequelize.addModels([Karyawan, Kegiatan, Attendance])
 
     await this.dropForeignKeyConstraints(sequelize);
     await this.dropUniqueConstraints(sequelize);

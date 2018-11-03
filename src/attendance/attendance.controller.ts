@@ -7,7 +7,7 @@ export class AttendanceController {
     @Get('attendance')
     public async index(@Res() res) {
         const attendance = await this.attService.findAll();
-        return res.status(HttpStatus.OK).json(attendance);
+        return res.status(HttpStatus.OK).json({ 'result': attendance });
     }
 
     @Post('attendance')
@@ -24,7 +24,7 @@ export class AttendanceController {
         if (!id) throw new HttpException('id attendance tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         const attendance = await this.attService.findById(id);
-        return res.status(HttpStatus.OK).json(attendance);
+        return res.status(HttpStatus.OK).json({ 'result': attendance });
     }
 
     @Put('attendance/:id')

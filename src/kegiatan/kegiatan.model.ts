@@ -2,9 +2,9 @@ import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BelongsT
 
 @Table({
     timestamps: true,
-    tableName: 'ms_lokasi'
+    tableName: 'ms_kegiatan'
 })
-export class Lokasi extends Model<Lokasi> {
+export class Kegiatan extends Model<Kegiatan> {
 
     @Column({
         type: DataType.UUID,
@@ -16,16 +16,7 @@ export class Lokasi extends Model<Lokasi> {
     id: string;
 
     @Column
-    namaLokasi: string;
-
-    @Column
-    lintangMaster: string; //Latitude
-
-    @Column
-    bujurMaster: string; //Longitude
-
-    @Column
-    alamat: string;
+    namaKegiatan: string;
 
     @CreatedAt
     creationDate: Date;

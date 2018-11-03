@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BeforeValidate, BeforeCreate, PrimaryKey, HasMany, DataType } from 'sequelize-typescript';
 import { HttpStatus, HttpException } from '@nestjs/common';
+import { Attendance } from '../attendance/attendance.model';
 
 @Table({
     timestamps: true,
@@ -16,6 +17,9 @@ export class Karyawan extends Model<Karyawan> {
         primaryKey: true
     })
     id: string;
+
+    @HasMany(() => Attendance, { foreignKey: 'karyawanNIK', sourceKey: 'NIK' })
+    attendance: Attendance;
 
     @Column({
         allowNull: false,
@@ -40,9 +44,6 @@ export class Karyawan extends Model<Karyawan> {
 
     @Column
     telp: string;
-
-    @Column
-    tanggalMasuk: Date;
 
     @Column
     email: string;

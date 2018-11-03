@@ -1,6 +1,6 @@
 import { Body, Controller, HttpStatus, Post, Res, HttpException } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Karyawan } from 'karyawan/karyawan.model';
+import { Karyawan } from '../karyawan/karyawan.model';
 import * as crypto from 'crypto';
 
 @Controller()
@@ -27,6 +27,6 @@ export class AuthController {
             email: karyawan.email,
             token: 'Bearer ' + token
         }
-        res.status(HttpStatus.ACCEPTED).json(resJson);
+        res.status(HttpStatus.ACCEPTED).json({ 'result': resJson });
     }
 }
