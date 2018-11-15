@@ -32,7 +32,7 @@ export class KaryawanController {
         return res.status(HttpStatus.OK).json({ 'result': karyawan });
     }
 
-    @Get('karyawan-reporting/:NIK')
+    @Get('history/:NIK')
     public async showReporting(@Param('NIK') NIK: string, @Res() res) {
         if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
 

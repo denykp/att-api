@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as dbConfig from "../config/config.json"
+import * as dbConfig from "./config.json"
 import { Sequelize } from 'sequelize-typescript';
 
 export const sequelize = new Sequelize(

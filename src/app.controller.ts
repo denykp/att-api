@@ -1,4 +1,4 @@
-import { Get, Controller } from '@nestjs/common';
+import { Get, Controller, Param, Res } from '@nestjs/common';
 import { AppService, sequelize } from './app.service';
 import { Karyawan } from './karyawan/karyawan.model';
 import { Attendance } from './attendance/attendance.model';
@@ -10,9 +10,10 @@ export class AppController {
     this.load_database();
   }
 
-  @Get()
-  async root() {
-    return this.appService.conn_test();
+  @Get('uploads/:imgId')
+  async root(@Param('imgId') imgId, @Res() res) {
+    return res.sendFile(imgId, { root: 'uploads' });
+    // return this.appService.conn_test();
   }
 
   async load_database() {

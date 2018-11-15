@@ -1,6 +1,7 @@
-import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BelongsTo, ForeignKey, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, UpdatedAt, DeletedAt, Unique, BelongsTo, ForeignKey, DataType, Sequelize, IsUUID } from 'sequelize-typescript';
 import { Karyawan } from '../karyawan/karyawan.model';
 import { Kegiatan } from '../kegiatan/kegiatan.model';
+import sequelize = require('sequelize');
 
 @Table({
     timestamps: true,
@@ -27,11 +28,17 @@ export class Attendance extends Model<Attendance> {
     @Column
     fotoLokasi: string;
 
-    @BelongsTo(() => Karyawan, { targetKey: 'id' })
+    @Column
+    namaLokasi: string;
+
+    @BelongsTo(() => Kegiatan, { targetKey: 'id' })
     kegiatan: Kegiatan
 
     @ForeignKey(() => Kegiatan)
-    @Column
+    @Column({
+        type: DataType.UUID,
+        defaultValue: DataType.UUIDV4
+    })
     kegiatanId: string;
 
     @Column
@@ -45,6 +52,9 @@ export class Attendance extends Model<Attendance> {
 
     @Column
     tipe: string; //Attend-In dan Attend-Out
+
+    @Column
+    keterangan: string;
 
     // @Column
     // attendIn: Date; //Absen masuk

@@ -18,7 +18,7 @@ export class KaryawanModule {
                 { path: '/karyawan/:NIK', method: RequestMethod.GET },
                 { path: '/karyawan/:NIK', method: RequestMethod.PUT },
                 { path: '/karyawan/:NIK', method: RequestMethod.DELETE },
-                { path: '/karyawan-reporting/:NIK', method: RequestMethod.GET }
+                { path: '/history/:NIK', method: RequestMethod.GET }
             );
     }
 }

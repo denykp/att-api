@@ -23,9 +23,9 @@ export class KaryawanService {
         return await this.karyawan.findOne<Karyawan>(options);
     }
 
-    public async findByNIK(NIK: string, reporting: boolean): Promise<Karyawan | null> {
+    public async findByNIK(NIK: string, history: boolean): Promise<Karyawan | null> {
         let result: any;
-        if (reporting) {
+        if (history) {
             result = await this.karyawan.findOne<Karyawan>({
                 where: { NIK: NIK },
                 include: [{ model: Attendance }]
