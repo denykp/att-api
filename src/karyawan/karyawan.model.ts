@@ -23,14 +23,15 @@ export class Karyawan extends Model<Karyawan> {
 
     @Column({
         allowNull: false,
-        unique: true
+        unique: true,
+        type: DataType.STRING(5)
     })
     NIK: string;
 
-    @Column
+    @Column({ type: DataType.STRING(25) })
     namaDepan: string;
 
-    @Column
+    @Column({ type: DataType.STRING(25) })
     namaBelakang: string;
 
     @Column
@@ -42,13 +43,13 @@ export class Karyawan extends Model<Karyawan> {
     @Column
     domisili: string;
 
-    @Column
+    @Column({ type: DataType.STRING(50) })
     telp: string;
 
-    @Column
+    @Column({ type: DataType.STRING(25) })
     email: string;
 
-    @Column
+    @Column({ type: DataType.STRING(100) })
     password: string;
 
     @CreatedAt

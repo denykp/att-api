@@ -15,7 +15,7 @@ export class Kegiatan extends Model<Kegiatan> {
     })
     id: string;
 
-    @Column
+    @Column({ type: DataType.STRING(50) })
     namaKegiatan: string;
 
     @CreatedAt

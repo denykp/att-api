@@ -25,10 +25,10 @@ export class Attendance extends Model<Attendance> {
     @Column
     karyawanNIK: string;
 
-    @Column
+    @Column({ type: DataType.STRING(100) })
     fotoLokasi: string;
 
-    @Column
+    @Column({ type: DataType.STRING(50) })
     namaLokasi: string;
 
     @BelongsTo(() => Kegiatan, { targetKey: 'id' })
@@ -41,16 +41,16 @@ export class Attendance extends Model<Attendance> {
     })
     kegiatanId: string;
 
-    @Column
+    @Column({ type: DataType.STRING(20) })
     lintangAktual: string; //Latitude
 
-    @Column
+    @Column({ type: DataType.STRING(20) })
     bujurAktual: string; //Longitude
 
     @Column
     tanggal: Date;
 
-    @Column
+    @Column({ type: DataType.STRING(15) })
     tipe: string; //Attend-In dan Attend-Out
 
     @Column
