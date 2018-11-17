@@ -42,24 +42,30 @@ export class AttendanceService {
 
     public async update(id: number, newValue: Attendance): Promise<Attendance | null> {
         return await this.seqInstance.transaction(async transaction => {
-            let attendance = await this.attendance.findById<Attendance>(id, {
+            await this.attendance.findById<Attendance>(id, {
                 transaction
-            });
-            if (!attendance) throw new HttpException('Attendance tidak ditemukan', HttpStatus.NOT_FOUND);
-
-            attendance = this._assign(attendance, newValue);
-            return await attendance.save({
-                returning: true,
-                transaction
+            }).then(attendance => {
+                attendance = this._assign(attendance, newValue);
+                return attendance.save({
+                    returning: true,
+                    transaction
+                });
+            }).catch(() => {
+                throw new HttpException('Attendance tidak ditemukan', HttpStatus.NOT_FOUND);
             });
         });
     }
 
     public async delete(id: number): Promise<void> {
         return await this.seqInstance.transaction(async transaction => {
-            return await this.attendance.destroy({
-                where: { id },
+            await this.attendance.findById<Attendance>(id, {
                 transaction
+            }).then(attendance => {
+                return attendance.destroy({
+                    transaction
+                });
+            }).catch(() => {
+                throw new HttpException('Attendance tidak ditemukan', HttpStatus.NOT_FOUND);
             });
         });
     }

@@ -30,31 +30,37 @@ export class KegiatanService {
 
     public async update(id: number, newValue: Kegiatan): Promise<Kegiatan | null> {
         return await this.seqInstance.transaction(async transaction => {
-            let kegiatan = await this.kegiatan.findById<Kegiatan>(id, {
+            await this.kegiatan.findById<Kegiatan>(id, {
                 transaction
-            });
-            if (!kegiatan) throw new HttpException('Kegiatan tidak ditemukan', HttpStatus.NOT_FOUND);
-
-            kegiatan = this._assign(kegiatan, newValue);
-            return await kegiatan.save({
-                returning: true,
-                transaction
+            }).then(kegiatan => {
+                kegiatan = this._assign(kegiatan, newValue);
+                return kegiatan.save({
+                    returning: true,
+                    transaction
+                });
+            }).catch(() => {
+                throw new HttpException('Kegiatan tidak ditemukan', HttpStatus.NOT_FOUND);
             });
         });
     }
 
     public async delete(id: number): Promise<void> {
         return await this.seqInstance.transaction(async transaction => {
-            return await this.kegiatan.destroy({
-                where: { id },
+            await this.kegiatan.findById<Kegiatan>(id, {
                 transaction
+            }).then(kegiatan => {
+                return kegiatan.destroy({
+                    transaction
+                });
+            }).catch(() => {
+                throw new HttpException('Kegiatan tidak ditemukan', HttpStatus.NOT_FOUND);
             });
         });
     }
 
     private _assign(kegiatan: Kegiatan, newValue: Kegiatan): Kegiatan {
-        for (const key of Object.keys(kegiatan)) {
-            if (kegiatan[key] !== newValue[key]) kegiatan[key] = newValue[key];
+        for (const key of Object.keys(newValue)) {
+            if (kegiatan.dataValues[key] !== newValue[key]) kegiatan[key] = newValue[key];
         }
 
         return kegiatan as Kegiatan;

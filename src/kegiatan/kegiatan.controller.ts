@@ -17,7 +17,12 @@ export class KegiatanController {
             throw new HttpException('Gagal membuat master kegiatan karena data tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.lksService.create(body);
-        return res.status(HttpStatus.CREATED).send();
+        return res.status(HttpStatus.CREATED).json({
+            'result': {
+                'httpCode': HttpStatus.CREATED,
+                'message': 'Data kegiatan berhasil disimpan'
+            }
+        });
     }
 
     @Get('kegiatan/:id')
@@ -28,12 +33,17 @@ export class KegiatanController {
         return res.status(HttpStatus.OK).json({ 'result': kegiatan });
     }
 
-    @Put('kegiatan/:id')
+    @Post('kegiatan/:id')
     public async update(@Body() body, @Param('id') id: number, @Res() res) {
         if (!id) throw new HttpException('id kegiatan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.lksService.update(id, body);
-        return res.status(HttpStatus.OK).send();
+        return res.status(HttpStatus.OK).json({
+            'result': {
+                'httpCode': HttpStatus.OK,
+                'message': 'Data kegiatan berhasil diupdate'
+            }
+        });
     }
 
     @Delete('kegiatan/:id')
@@ -41,6 +51,11 @@ export class KegiatanController {
         if (!id) throw new HttpException('id kegiatan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.lksService.delete(id);
-        return res.status(HttpStatus.OK).send();
+        return res.status(HttpStatus.OK).json({
+            'result': {
+                'httpCode': HttpStatus.OK,
+                'message': 'Data kegiatan berhasil dihapus'
+            }
+        });
     }
 }

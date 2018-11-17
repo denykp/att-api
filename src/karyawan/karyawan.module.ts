@@ -16,7 +16,7 @@ export class KaryawanModule {
             .forRoutes(
                 { path: '/karyawan', method: RequestMethod.GET },
                 { path: '/karyawan/:NIK', method: RequestMethod.GET },
-                { path: '/karyawan/:NIK', method: RequestMethod.PUT },
+                { path: '/karyawan/:NIK', method: RequestMethod.POST },
                 { path: '/karyawan/:NIK', method: RequestMethod.DELETE },
                 { path: '/history/:NIK', method: RequestMethod.GET }
             );

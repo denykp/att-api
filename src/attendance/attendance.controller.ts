@@ -34,7 +34,12 @@ export class AttendanceController {
             throw new HttpException('Gagal menyimpan attendance karena data tidak ditemukan', HttpStatus.BAD_REQUEST);
         body.fotoLokasi = file.filename;
         await this.attService.create(body);
-        return res.status(HttpStatus.CREATED).send();
+        return res.status(HttpStatus.CREATED).json({
+            'result': {
+                'httpCode': HttpStatus.CREATED,
+                'message': 'Data attendance berhasil disimpan'
+            }
+        });
     }
 
     @Get('attendance/:id')
@@ -45,12 +50,17 @@ export class AttendanceController {
         return res.status(HttpStatus.OK).json({ 'result': attendance });
     }
 
-    @Put('attendance/:id')
+    @Post('attendance/:id')
     public async update(@Body() body, @Param('id') id: number, @Res() res) {
         if (!id) throw new HttpException('id attendance tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.attService.update(id, body);
-        return res.status(HttpStatus.OK).send();
+        return res.status(HttpStatus.OK).json({
+            'result': {
+                'httpCode': HttpStatus.OK,
+                'message': 'Data attendance berhasil diupdate'
+            }
+        });
     }
 
     @Delete('attendance/:id')
@@ -58,6 +68,11 @@ export class AttendanceController {
         if (!id) throw new HttpException('id attendance tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.attService.delete(id);
-        return res.status(HttpStatus.OK).send();
+        return res.status(HttpStatus.OK).json({
+            'result': {
+                'httpCode': HttpStatus.OK,
+                'message': 'Data kegiatan berhasil dihapus'
+            }
+        });
     }
 }

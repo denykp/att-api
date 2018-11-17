@@ -21,7 +21,12 @@ export class KaryawanController {
             throw new HttpException('Gagal membuat master karyawan karena data tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.karService.create(body);
-        return res.status(HttpStatus.CREATED).send();
+        return res.status(HttpStatus.CREATED).json({
+            'result': {
+                'httpCode': HttpStatus.CREATED,
+                'message': 'Data karyawan berhasil disimpan'
+            }
+        });
     }
 
     @Get('karyawan/:NIK')
@@ -40,12 +45,17 @@ export class KaryawanController {
         return res.status(HttpStatus.OK).json({ 'result': karyawan });
     }
 
-    @Put('karyawan/:NIK')
+    @Post('karyawan/:NIK')
     public async update(@Body() body, @Param('NIK') NIK: string, @Res() res) {
         if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.karService.update(NIK, body);
-        return res.status(HttpStatus.OK).send();
+        return res.status(HttpStatus.OK).json({
+            'result': {
+                'httpCode': HttpStatus.OK,
+                'message': 'Data karyawan berhasil diupdate'
+            }
+        });
     }
 
     @Delete('karyawan/:NIK')
@@ -53,6 +63,11 @@ export class KaryawanController {
         if (!NIK) throw new HttpException('NIK karyawan tidak ditemukan', HttpStatus.BAD_REQUEST);
 
         await this.karService.delete(NIK);
-        return res.status(HttpStatus.OK).send();
+        return res.status(HttpStatus.OK).json({
+            'result': {
+                'httpCode': HttpStatus.OK,
+                'message': 'Data karyawan berhasil dihapus'
+            }
+        });
     }
 }
